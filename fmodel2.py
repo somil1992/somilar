@@ -29,8 +29,8 @@ class Predict(Resource):
         output = pd.DataFrame()
         output["Date"] = data.index
         output["prediction"] = output_list
-        output.to_csv("prediction1.csv",index = False)
-        return output
+        output.to_csv("prediction1.csv",index = False)        
+        return output.to_json()
 
 
 
