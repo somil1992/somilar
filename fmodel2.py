@@ -30,7 +30,7 @@ class Predict(Resource):
         output["Date"] = data.index
         output["prediction"] = output_list
         output.to_csv("prediction1.csv",index = False)
-        return 0
+        return output
 
 
 
