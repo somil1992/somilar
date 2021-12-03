@@ -22,7 +22,7 @@ class Predict(Resource):
         print(data)
         print("out")
         print("auto build")
-        print("auto build")
+#       print("auto build")
              
         prediction = model.predict(n_periods = 60, exogenous = data)
 
