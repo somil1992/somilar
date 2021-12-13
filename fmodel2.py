@@ -35,6 +35,7 @@ class Predict(Resource):
         output["prediction"] = output_list
         output.to_csv("prediction1.csv",index = False)        
         return output.to_json()
+    #check for change
 
 
 
