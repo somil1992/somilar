@@ -23,6 +23,7 @@ config=pd.read_csv('config/config.csv')
 
 class Predict(Resource):
     def post(self):
+        #Definition
         dict={}
     
         for i in range(len(config)):
