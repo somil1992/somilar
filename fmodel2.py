@@ -8,38 +8,37 @@ import pandas as pd
 app = Flask(__name__)
 # creating an API object
 api = Api(app)
-model = pickle.load(open('model.pkl', 'rb'))
+
+#Loading Models
+model = pickle.load(open('model/model.pkl', 'rb'))
+
+#loading configrations
+config=pd.read_csv('config/config.csv')
+
+
 # making a class for a particular resource
 # the get, post methods correspond to get and post requests
 # they are automatically mapped by flask_restful.
+
+
 class Predict(Resource):
     def post(self):
-        print("here")
-        data = request.files["kk"]
-        # data = request.form['gdp']
-        data = pd.read_csv(data)
-        data.set_index("date", inplace = True)
-        print(data)
-        print("out")
-        print("auto build")
-        print("auto build1")
-#       print("auto build")
-             
-        prediction = model.predict(n_periods = 60, exogenous = data)
+        dict={}
+    
+        for i in range(len(config)):
+            #param = config.iloc[i,0]
+            #dict["var{0}".format(i+1)] = request.args.get(param)
+            dict["var{0}".format(i+1)] = request.args.get(config.iloc[i,0])
+            
+        values = dict.values()
+        values_list = list(values)
 
-        output_list = []
-        for i in prediction:
-            output_list.append(i)
-        output = pd.DataFrame()
-        output["Date"] = data.index
-        output["prediction"] = output_list
-        output.to_csv("prediction1.csv",index = False)        
-        return output.to_json()
-    #check for change
+        prediction = model.predict([values_list])
+        return jsonify(prediction.tolist())
 
 
 
-api.add_resource(Predict, '/forecast2')
+api.add_resource(Predict, '/predict')
 
 # driver function
 if __name__ == '__main__':
