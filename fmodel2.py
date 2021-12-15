@@ -54,20 +54,24 @@ class Predict(Resource):
 
         #loading configrations
         config = pd.read_csv('source_config/' + config_filename)
+        
+        print(config)
+        print(model)
 
-        #Definition
-        dict={}
+#         #Definition
+#         dict={}
     
-        for i in range(len(config)):
-            #param = config.iloc[i,0]
-            #dict["var{0}".format(i+1)] = request.args.get(param)
-            dict["var{0}".format(i+1)] = request.args.get(config.iloc[i,0])
+#         for i in range(len(config)):
+#             #param = config.iloc[i,0]
+#             #dict["var{0}".format(i+1)] = request.args.get(param)
+#             dict["var{0}".format(i+1)] = request.args.get(config.iloc[i,0])
             
-        values = dict.values()
-        values_list = list(values)
+#         values = dict.values()
+#         values_list = list(values)
 
-        prediction = model.predict([values_list])
-        return jsonify(prediction.tolist())
+#         prediction = model.predict([values_list])
+#         return jsonify(prediction.tolist())
+        return 0
 
 
 
