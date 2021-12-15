@@ -40,8 +40,8 @@ api = Api(app)
 # # they are automatically mapped by flask_restful.
 
 
-# class Predict(Resource):
-#     def post(self):
+class Predict(Resource):
+    def post(self):
 
         model_name = request.args.get("model")
         config_name = request.args.get("config")
@@ -71,7 +71,7 @@ api = Api(app)
 
 
 
-# api.add_resource(Predict, '/predict')
+api.add_resource(Predict, '/predict')
 
 # driver function
 if __name__ == '__main__':
