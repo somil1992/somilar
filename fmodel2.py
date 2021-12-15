@@ -13,9 +13,9 @@ app = Flask(__name__)
 api = Api(app)
 
 # All files ending with .pkl in source_model
-model_path = 'source_model\\*pkl'
-model_files = glob.glob(model_path)
-print(model_files)
+# model_path = 'source_model\\*pkl'
+# model_files = glob.glob(model_path)
+# print(model_files)
 # max_model_file = max(model_files, key=os.path.getctime)
 
 # model_dst= 'model\\model.pkl'
@@ -33,11 +33,6 @@ print(model_files)
 
 
 
-# #Loading Models
-# model = pickle.load(open('model/model.pkl', 'rb'))
-
-# #loading configrations
-# config=pd.read_csv('config/config.csv')
 
 
 # # making a class for a particular resource
@@ -47,6 +42,19 @@ print(model_files)
 
 # class Predict(Resource):
 #     def post(self):
+
+        model = request.args.get("model")
+        config = request.args.get("config")
+        
+        model_filename = model
+        config_filename = pickle.load(open(filename, 'rb'))
+
+        # #Loading Models
+        # model = pickle.load(open('model/model.pkl', 'rb'))
+
+        # #loading configrations
+        # config=pd.read_csv('config/config.csv')
+
 #         #Definition
 #         dict={}
     
