@@ -43,31 +43,31 @@ api = Api(app)
 # class Predict(Resource):
 #     def post(self):
 
-        model = request.args.get("model")
-        config = request.args.get("config")
+        model_name = request.args.get("model")
+        config_name = request.args.get("config")
         
-        model_filename = model
-        config_filename = pickle.load(open(filename, 'rb'))
+        model_filename = model_name + ".pkl"
+        config_filename = config_name + ".csv"
 
-        # #Loading Models
-        # model = pickle.load(open('model/model.pkl', 'rb'))
+        #Loading Models
+        model = pickle.load(open('source_model/' + model_filename , 'rb'))
 
-        # #loading configrations
-        # config=pd.read_csv('config/config.csv')
+        #loading configrations
+        config = pd.read_csv('source_config/' + config_filename)
 
-#         #Definition
-#         dict={}
+        #Definition
+        dict={}
     
-#         for i in range(len(config)):
-#             #param = config.iloc[i,0]
-#             #dict["var{0}".format(i+1)] = request.args.get(param)
-#             dict["var{0}".format(i+1)] = request.args.get(config.iloc[i,0])
+        for i in range(len(config)):
+            #param = config.iloc[i,0]
+            #dict["var{0}".format(i+1)] = request.args.get(param)
+            dict["var{0}".format(i+1)] = request.args.get(config.iloc[i,0])
             
-#         values = dict.values()
-#         values_list = list(values)
+        values = dict.values()
+        values_list = list(values)
 
-#         prediction = model.predict([values_list])
-#         return jsonify(prediction.tolist())
+        prediction = model.predict([values_list])
+        return jsonify(prediction.tolist())
 
 
 
