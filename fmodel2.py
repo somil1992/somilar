@@ -58,20 +58,21 @@ class Predict(Resource):
         print(config)
         print(model)
 
-#         #Definition
-#         dict={}
+        #Definition
+        dict={}
     
-#         for i in range(len(config)):
-#             #param = config.iloc[i,0]
-#             #dict["var{0}".format(i+1)] = request.args.get(param)
-#             dict["var{0}".format(i+1)] = request.args.get(config.iloc[i,0])
+        for i in range(len(config)):
+            #param = config.iloc[i,0]
+            #dict["var{0}".format(i+1)] = request.args.get(param)
+            dict["var{0}".format(i+1)] = float(request.args.get(config.iloc[i,0]))
             
-#         values = dict.values()
-#         values_list = list(values)
+        values = dict.values()
+        values_list = list(values)
+        print(values_list)
+        prediction = model.predict([values_list])
+        return jsonify(prediction.tolist())
+        # return 0
 
-#         prediction = model.predict([values_list])
-#         return jsonify(prediction.tolist())
-        return 0
 
 
 
@@ -79,5 +80,4 @@ api.add_resource(Predict, '/predict')
 
 # driver function
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=5000,debug = False)
-
+    app.run(host="0.0.0.0",port=5000,debug = True)
