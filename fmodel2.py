@@ -42,6 +42,14 @@ api = Api(app)
 
 class Predict(Resource):
     def post(self):
+        '''
+        This function takes the following inputs:
+        1) model_name - pickle file to be used as model input
+        2) config_name - config csv file format for loading the configurations
+        3) model inputs - variable name (parameter) along with parameter value
+        
+        Post reading the inputs - model file is utilized to forecast the output.
+        '''
 
         model_name = request.args.get("model")
         config_name = request.args.get("config")
