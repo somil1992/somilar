@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ workflow_v2 ]
   pull_request:
-    branches: [ main ]
+    branches: [ workflow_v2 ]
 
 jobs:
 
@@ -17,5 +17,6 @@ jobs:
     - name: Build the Docker image
       run: |
         echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin docker.io
-        docker build . --file Dockerfile --tag docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:$GITHUB_SHA
-        docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:$GITHUB_SHA
+        #docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin docker.io
+        docker build . --file Dockerfile --tag docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY_V2 }}:$GITHUB_SHA
+        docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY_V2 }}:$GITHUB_SHA
