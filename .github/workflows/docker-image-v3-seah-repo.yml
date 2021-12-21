@@ -6,19 +6,19 @@ on:
   pull_request:
     branches: [ workflow_v2 ]
 
-# jobs:
+jobs:
 
-#   build:
+  build:
 
-#     runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-#     steps:
-#     - uses: actions/checkout@v2
-#     - name: Build the Docker image
-#       run: |
-#         echo "${{ secrets.DOCKER_HUB_TOKEN_SEAH }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME_SEAH }}" --password-stdin docker.io
-#         docker build . --file Dockerfile --tag docker.io/${{ secrets.DOCKER_HUB_USERNAME_SEAH }}/${{ secrets.DOCKER_HUB_REPOSITORY_V2_SEAH }}:$GITHUB_SHA
-#         docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME_SEAH }}/${{ secrets.DOCKER_HUB_REPOSITORY_V2_SEAH }}:$GITHUB_SHA
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: |
+        echo "${{ secrets.DOCKER_HUB_TOKEN_SEAH }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME_SEAH }}" --password-stdin docker.io
+        docker build . --file Dockerfile --tag docker.io/${{ secrets.DOCKER_HUB_USERNAME_SEAH }}/${{ secrets.DOCKER_HUB_REPOSITORY_V2_SEAH }}:$GITHUB_SHA
+        docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME_SEAH }}/${{ secrets.DOCKER_HUB_REPOSITORY_V2_SEAH }}:$GITHUB_SHA
 
 
 # name: Docker Image CI seah youT
@@ -43,20 +43,20 @@ on:
 #         docker build . --file Dockerfile --tag docker.io/${{ secrets.DOCKER_HUB_USERNAME_SEAH }}/${{ secrets.DOCKER_HUB_REPOSITORY_V2_SEAH }}:$GITHUB_SHA
 #         docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME_SEAH }}/${{ secrets.DOCKER_HUB_REPOSITORY_V2_SEAH }}:$GITHUB_SHA
         
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: docker login
-      env:
-        DOCKER_USER: ${{ secrets.USERNAME_SEAH }}   
-        DOCKER_PASSWORD: ${{ secrets.PASSWORD_SEAH }}  
-      run: |
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-    - name: docker build image
-      run: |
-        docker build . -t dockerimagecheck:1.0.0
-      - name: docker push
-      run: |
-        docker push dockerimagecheck:1.0.0
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: docker login
+#       env:
+#         DOCKER_USER: ${{ secrets.USERNAME_SEAH }}   
+#         DOCKER_PASSWORD: ${{ secrets.PASSWORD_SEAH }}  
+#       run: |
+#         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+#     - name: docker build image
+#       run: |
+#         docker build . -t dockerimagecheck:1.0.0
+#       - name: docker push
+#       run: |
+#         docker push dockerimagecheck:1.0.0
