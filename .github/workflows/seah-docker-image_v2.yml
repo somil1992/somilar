@@ -1,0 +1,22 @@
+name: Seah Docker Image CI
+
+on:
+  push:
+    branches: [ seah_workflow ]
+  pull_request:
+    branches: [ seah_workflow ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: |
+        echo "${{ secrets.SEAH_DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.SEAH_DOCKER_HUB_USERNAME }}" --password-stdin docker.io
+        #docker login -u "${{ secrets.SEAH_DOCKER_HUB_USERNAME }}" --password-stdin docker.io
+        docker build . --file Dockerfile --tag docker.io/${{ secrets.SEAH_DOCKER_HUB_USERNAME }}/${{ secrets.SEAH_DOCKER_HUB_REPOSITORY_V3 }}:$GITHUB_SHA
+        docker push docker.io/${{ secrets.SEAH_DOCKER_HUB_USERNAME }}/${{ secrets.SEAH_DOCKER_HUB_REPOSITORY_V3 }}:$GITHUB_SHA
