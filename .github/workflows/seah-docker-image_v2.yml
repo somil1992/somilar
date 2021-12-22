@@ -14,9 +14,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build the Docker image
+    - name: Build the Docker image      
+      env:
+        TIMESTAMP: $(date +%s) 
       run: |
         echo "${{ secrets.SEAH_DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.SEAH_DOCKER_HUB_USERNAME }}" --password-stdin docker.io
         #docker login -u "${{ secrets.SEAH_DOCKER_HUB_USERNAME }}" --password-stdin docker.io
-        docker build . --file Dockerfile --tag docker.io/${{ secrets.SEAH_DOCKER_HUB_USERNAME }}/${{ secrets.SEAH_DOCKER_HUB_REPOSITORY }}:$(date +%s)
-        docker push docker.io/${{ secrets.SEAH_DOCKER_HUB_USERNAME }}/${{ secrets.SEAH_DOCKER_HUB_REPOSITORY }}:$(date +%s)
+        docker build . --file Dockerfile --tag docker.io/${{ secrets.SEAH_DOCKER_HUB_USERNAME }}/${{ secrets.SEAH_DOCKER_HUB_REPOSITORY }}:$TIMESTAMP
+        docker push docker.io/${{ secrets.SEAH_DOCKER_HUB_USERNAME }}/${{ secrets.SEAH_DOCKER_HUB_REPOSITORY }}:$TIMESTAMP
