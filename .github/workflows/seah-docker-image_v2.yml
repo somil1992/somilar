@@ -17,5 +17,11 @@ jobs:
     - name: Build the Docker image      
       run: |
         echo "${{ secrets.SEAH_DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.SEAH_DOCKER_HUB_USERNAME }}" --password-stdin docker.io
+        #building docker image with tag - run number
         docker build . --file Dockerfile --tag docker.io/${{ secrets.SEAH_DOCKER_HUB_USERNAME }}/${{ secrets.SEAH_DOCKER_HUB_REPOSITORY }}:$GITHUB_RUN_NUMBER
         docker push docker.io/${{ secrets.SEAH_DOCKER_HUB_USERNAME }}/${{ secrets.SEAH_DOCKER_HUB_REPOSITORY }}:$GITHUB_RUN_NUMBER
+        
+        #building docker image with tag - latest
+        docker build . --file Dockerfile --tag docker.io/${{ secrets.SEAH_DOCKER_HUB_USERNAME }}/${{ secrets.SEAH_DOCKER_HUB_REPOSITORY }}:latest
+        docker push docker.io/${{ secrets.SEAH_DOCKER_HUB_USERNAME }}/${{ secrets.SEAH_DOCKER_HUB_REPOSITORY }}:latest
+
