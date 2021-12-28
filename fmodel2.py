@@ -6,6 +6,7 @@ import numpy as np
 import joblib
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
+import cv2
 # import glob
 # import os.path
 
@@ -32,24 +33,27 @@ class Predict(Resource):
         Post reading the inputs - model file is utilized to forecast the output.
         '''
 
-        model_name = request.form.get("model")
-        config_name = request.form.get("config")
+        #=========REQUIREMENT=========#
         input_format = request.form.get("input_format")
-        
-        model_filename = model_name + ".pkl"
-        config_filename = config_name + ".csv"
-   
-        #Loading Models
-        #model = pickle.load(open('source_model/' + model_filename , 'rb'))
-        model = joblib.load('source_model/' + model_filename )
 
-        #loading configrations
-        config = pd.read_csv('source_config/' + config_filename)
-        
-        print(config)
-        print(model)
 
         if input_format == 'value' :
+            
+            #Loading Models
+            #=========REQUIREMENT=========#
+            model_name = request.form.get("model")
+            model_filename = model_name + ".pkl"
+            model = joblib.load('source_model/' + model_filename )
+
+            #loading configrations
+            #=========REQUIREMENT=========#
+            config_name = request.form.get("config")       
+            config_filename = config_name + ".csv"
+            config = pd.read_csv('source_config/' + config_filename)
+            
+            print(config)
+            print(model)
+
             #Definition
             dict={}    
             for i in range(len(config)):
@@ -62,6 +66,14 @@ class Predict(Resource):
             output = jsonify(prediction.tolist())
 
         elif input_format == 'file' :
+
+            #Loading Models
+            #=========REQUIREMENT=========#
+            model_name = request.form.get("model")
+            model_filename = model_name + ".pkl"
+            model = joblib.load('source_model/' + model_filename )
+
+            #=========REQUIREMENT=========#
             data = request.files["file"]
             data = pd.read_csv(data)
 
@@ -70,15 +82,19 @@ class Predict(Resource):
 
         
         elif input_format == 'text' :        
-            #load the model from disk
-            #rf_classifier = joblib.load(open('model_sentiment_nlp_model.pkl','rb'))
+            #Loading Models
+            #=========REQUIREMENT=========#
+            model_name = request.form.get("model")
+            model_filename = model_name + ".pkl"
+            model = joblib.load('source_model/' + model_filename )
+
             #Load count vector from disk
             cv = joblib.load(open('source_model/model_sentiment_transform.pkl','rb'))
             #Load the vocabulary
             words = joblib.load(open('source_model/model_sentiment_vocabulary.pkl','rb'))
 
-
             #loading text data from user
+            #=========REQUIREMENT=========#
             text = request.form.get("text")
             data = [text]
 
@@ -99,6 +115,57 @@ class Predict(Resource):
 
             # create JSON object
             output = {'prediction': pred_text, 'confidence': confidence}   
+
+                    
+        elif input_format == 'image' : 
+            #=========REQUIREMENT=========# 
+            prototxt = request.form.get("prototxt")
+            #=========REQUIREMENT=========#
+            caffemodel = request.form.get("caffemodel")
+            #=========REQUIREMENT=========#
+            npy = request.form.get("npy")       
+            net = cv2.dnn.readNetFromCaffe('./source_model/' + prototxt,'./source_model/' + caffemodel)
+            pts = np.load('./source_model/' + npy)
+            class8 = net.getLayerId("class8_ab")
+            conv8 = net.getLayerId("conv8_313_rh")
+            pts = pts.transpose().reshape(2,313,1,1)
+            net.getLayer(class8).blobs = [pts.astype("float32")]
+            net.getLayer(conv8).blobs = [np.full([1,313],2.606,dtype='float32')]
+
+            #=========REQUIREMENT=========#
+            filestr = request.files['image'].read()
+            #convert string data to numpy array
+            npimg = np.fromstring(filestr, np.uint8)
+            # convert numpy array to image
+            image = cv2.imdecode(npimg,cv2.IMREAD_COLOR)
+            
+            scaled = image.astype("float32")/255.0
+            lab = cv2.cvtColor(scaled,cv2.COLOR_BGR2LAB)
+
+
+            resized = cv2.resize(lab,(224,224))
+            L = cv2.split(resized)[0]
+            L -= 50
+
+
+            net.setInput(cv2.dnn.blobFromImage(L))
+            ab = net.forward()[0, :, :, :].transpose((1,2,0))
+
+            ab = cv2.resize(ab, (image.shape[1],image.shape[0]))
+
+            L = cv2.split(lab)[0]
+            colorized = np.concatenate((L[:,:,np.newaxis], ab), axis=2)
+
+            colorized = cv2.cvtColor(colorized,cv2.COLOR_LAB2BGR)
+            colorized = np.clip(colorized,0,1)
+
+            colorized = (255 * colorized).astype("uint8")
+
+            cv2.imshow("Original",image)
+            cv2.imshow("Colorized",colorized)
+
+            cv2.waitKey(0)
+            output = 0
 
         return output
 
