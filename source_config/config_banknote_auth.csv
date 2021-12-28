@@ -1,0 +1,5 @@
+variable,type
+variance,numeric
+skewness,numeric
+curtosis,numeric
+entropy,numeric
