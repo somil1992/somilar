@@ -2,9 +2,9 @@ name: Seah Docker Image CI
 
 on:
   push:
-    branches: [ seah_workflow ]
+    branches: [ main ]
   pull_request:
-    branches: [ seah_workflow ]
+    branches: [ main ]
 
 jobs:
 
