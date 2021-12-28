@@ -1,11 +1,13 @@
 from flask import Flask, jsonify, request
 from flask_restful import Resource, Api
-import pickle
+# import pickle
 import numpy as np
-import json
+# import json
+import joblib
 import pandas as pd
-import glob
-import os.path
+from sklearn.feature_extraction.text import CountVectorizer
+# import glob
+# import os.path
 
 # creating the flask app
 app = Flask(__name__)
@@ -57,23 +59,53 @@ class Predict(Resource):
             values_list = list(values)
             print(values_list)
             prediction = model.predict([values_list])
+            output = jsonify(prediction.tolist())
 
         elif input_format == 'file' :
             data = request.files["file"]
             data = pd.read_csv(data)
 
             prediction = model.predict(data)
+            output = jsonify(prediction.tolist())
+
+        
+        elif input_format == 'text' :        
+            #load the model from disk
+            #rf_classifier = joblib.load(open('model_sentiment_nlp_model.pkl','rb'))
+            #Load count vector from disk
+            cv = joblib.load(open('source_model/model_sentiment_transform.pkl','rb'))
+            #Load the vocabulary
+            words = joblib.load(open('source_model/model_sentiment_vocabulary.pkl','rb'))
 
 
+            #loading text data from user
+            text = request.form.get("text")
+            data = [text]
 
-        return jsonify(prediction.tolist())
+            countVect = CountVectorizer(vocabulary=words)
+            sentence = countVect.transform(data).toarray()
 
+            # vectorize the user's query and make a prediction
+            review_prediction = model.predict(sentence)[0]
+            review_prediction_probablity = model.predict_proba(sentence)
+                    
+            # Output either 'Negative' or 'Positive' along with the score
+            if review_prediction == 0:
+                pred_text = 'Negative'
+                confidence = review_prediction_probablity[0][0]
+            else:
+                pred_text = 'Positive'
+                confidence = review_prediction_probablity[0][1]
 
+            # create JSON object
+            output = {'prediction': pred_text, 'confidence': confidence}   
 
+        return output
 
 
 api.add_resource(Predict, '/predict')
 
 # driver function
 if __name__ == '__main__':
+    #app.run(host="0.0.0.0",port=5005,debug=True)
     app.run(host="0.0.0.0",port=5000,debug=False)
