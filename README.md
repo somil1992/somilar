@@ -39,7 +39,7 @@ Deactivation : deactivate
 Getting requirements : pip freeze > requirements.txt
 
 Installing requirements : pip install -r requirements.txt
-![image](https://user-images.githubusercontent.com/33191690/161816614-b95f3453-0dfb-4d4c-ac28-cdcf76107086.png)
+
 
 
 
@@ -53,5 +53,16 @@ https://github.com/ContinuumIO/anaconda-issues/issues/11994
 $ pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org <package_name>
 
 
-![image](https://user-images.githubusercontent.com/33191690/161816658-7afa0c73-eb96-4fc3-957c-01c4774cd353.png)
+
+
+# Twitter Scrapping
+
+	1) SNS package
+	https://betterprogramming.pub/how-to-scrape-tweets-with-snscrape-90124ed006af
+	
+	https://github.com/MartinBeckUT/TwitterScraper/tree/master/snscrape
+	
+https://github.com/JustAnotherArchivist/snscrape/tree/master/snscrape/modules
+
+
 
