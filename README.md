@@ -12,10 +12,10 @@ conda install tensorflow
 
 import tensorflow
 
-Jupyter notebook![image](https://user-images.githubusercontent.com/33191690/161816504-697fc3af-1f32-413a-ac51-ad3ba5987db9.png)
 
 
-# Virtual Env Setup![image](https://user-images.githubusercontent.com/33191690/161816557-4ae83a0a-def4-4a87-b922-7e9634dd652a.png)
+
+# Virtual Env Setup
 New Virtual Env setup
 
 	1) Python - m venv AzureVision
